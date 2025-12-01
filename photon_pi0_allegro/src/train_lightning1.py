@@ -85,26 +85,18 @@ def main():
         trainer = L.Trainer(
             callbacks=get_callbacks_eval(args),
             accelerator="gpu",
-            devices=[3],
+            devices=[0],
             default_root_dir=args.model_prefix,
             logger=wandb_logger,
         )
-        if args.correction:
-            for name, get_test_loader in test_loaders.items():
-                test_loader = get_test_loader()
-                trainer.validate(
-                    model=model,
-                    dataloaders=test_loader,
-                    # ckpt_path=args.load_model_weights,
-                )
-        else:
-            for name, get_test_loader in test_loaders.items():
-                test_loader = get_test_loader()
-                trainer.validate(
-                    model=model,
-                    # ckpt_path=args.load_model_weights,
-                    dataloaders=test_loader,
-                )
+        
+        for name, get_test_loader in test_loaders.items():
+            test_loader = get_test_loader()
+            trainer.validate(
+                model=model,
+                # ckpt_path=args.load_model_weights,
+                dataloaders=test_loader,
+            )
 
 
 if __name__ == "__main__":
